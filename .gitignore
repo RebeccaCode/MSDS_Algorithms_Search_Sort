@@ -151,3 +151,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 .idea/*
+.idea/misc.xml
+.idea/Algorithms_Search_Sort.iml
