@@ -5,7 +5,7 @@ from numpy import log10
 from numpy.random import randint
 
 from heaps import *
-
+import copy
 
 class TestHeaps(unittest.TestCase):
 
@@ -150,11 +150,19 @@ class TestHeaps(unittest.TestCase):
         min_value = 0
         max_value = 10 ** 3
         power = 1
-        max_power = 3
+        max_power = 4
         while power <= max_power:
             size = 10 ** power
 
             a = randint(min_value, max_value, size)
+
+            a_start = time.time()
+            b = copy.deepcopy(a)
+            b.sort()
+            a_end = time.time()
+            runtime = a_end - a_start
+
+            print(f'Execution of Python List sort with array size {size} took {runtime} milliseconds.')
 
             a_start = time.time()
             max_a = max_heapify(a, 0, len(a) - 1)
