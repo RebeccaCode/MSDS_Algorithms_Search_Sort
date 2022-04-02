@@ -1,117 +1,42 @@
-def coalesce(x, default=-1):
-    if x is None:
-        x = default
-    return x
-
-
-def binary_left(a, i):
-    # account for 0-index array
-    x = i + 1
-    left = (x * 2) - 1
-    if left > len(a) - 1:
-        left = None
-    return left
-
-
-def binary_right(a, i):
-    # account for 0-index array
-    x = i + 1
-    right = ((x * 2) + 1) - 1
-    if right > len(a) - 1:
-        right = None
-    return right
-
-
-def binary_parent(a, i):
-    # account for 0-index array
-    x = i + 1
-
-    if x == 1:
-        parent = None
-    elif x % 2 == 0:
-        parent = int((x / 2) - 1)
-    else:
-        parent = int(((x - 1) / 2) - 1)
-
-    return parent
-
-
-def array_swap(a=[], i=0, j=0):
-    x = a[j]
-    a[j] = a[i]
-    a[i] = x
+def heapify(a, min=True):
+    last_parent = (len(a) // 2) - 1
+    for i in range(last_parent, -1, -1):
+        a = bubble_down(a, start=i, min=min)
     return a
 
 
-def min_parent_child(a, child, parent):
-    swap_occurred = False
-    if parent is None or parent < 0:
-        pass
-    elif child is None or child < 0 or child > len(a) - 1:
-        pass
-    elif a[parent] > a[child]:
-        a = array_swap(a, child, parent)
-        swap_occurred = True
-    else:
-        pass
-    return a, swap_occurred
+def bubble_down(a=[], start=0, min=True):
+    left = (2 * start) + 1
+    right = left + 1
 
-
-def max_parent_child(a, child, parent):
-    swap_occurred = False
-    if parent is None or parent < 0:
-        pass
-    elif child is None or child < 0 or child > len(a) - 1:
-        pass
-    elif a[parent] < a[child]:
-        a = array_swap(a, child, parent)
-        swap_occurred = True
-    else:
-        pass
-    return a, swap_occurred
-
-
-def min_heapify(a=[], start=0, end=0):
-    if start >= end:
-        return a
-
-    parent = start
-    while parent < end:
-        left = binary_left(a, parent)
-        right = binary_right(a, parent)
-        for x in [left, right]:
-            a, swap_occurred = min_parent_child(a, child=x, parent=parent)
-            if swap_occurred:
-                parent_parent = coalesce(binary_parent(a, parent), -1)
-                if parent_parent >= 0 and a[parent_parent] > a[parent]:
-                    a = min_heapify(a, start=0, end=parent)
-
-        if left == end or right == end:
-            break
-
-        parent = parent + 1
-
-    return a
-
-
-def max_heapify(a=[], start=0, end=0):
-    if start >= end:
-        return a
-
-    parent = start
-    while parent < end:
-        left = binary_left(a, parent)
-        right = binary_right(a, parent)
-        for x in [left, right]:
-            a, swap_occurred = max_parent_child(a, child=x, parent=parent)
-            if swap_occurred:
-                parent_parent = coalesce(binary_parent(a, parent), -1)
-                if parent_parent >= 0 and a[parent_parent] < a[parent]:
-                    a = max_heapify(a, start=0, end=parent)
-
-        if left == end or right == end:
-            break
-
-        parent = parent + 1
-
+    # if there is a right node, do comparisons against right node
+    if right < len(a):
+        if min:
+            # if left is smallest child and parent > left, swap
+            if left < len(a) and a[left] < a[right] and a[start] > a[left]:
+                a[start], a[left] = a[left], a[start]
+                a = bubble_down(a, left, min)
+            # right is smallest child; if parent > right, swap
+            elif right < len(a) and a[start] > a[right]:
+                a[start], a[right] = a[right], a[start]
+                a = bubble_down(a, right, min)
+        else:
+            # if left is largest child and parent < left, swap
+            if left < len(a) and a[left] > a[right] and a[start] < a[left]:
+                a[start], a[left] = a[left], a[start]
+                a = bubble_down(a, left, min)
+            # right is largest child; if parent < right, swap
+            elif right < len(a) and a[start] < a[right]:
+                a[start], a[right] = a[right], a[start]
+                a = bubble_down(a, right, min)
+    # comparison against left node only
+    elif left < len(a):
+        if min:
+            if a[start] > a[left]:
+                a[start], a[left] = a[left], a[start]
+                a = bubble_down(a, left, min)
+        else:
+            if a[start] < a[left]:
+                a[start], a[left] = a[left], a[start]
+                a = bubble_down(a, left, min)
     return a
