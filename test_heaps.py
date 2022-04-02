@@ -48,7 +48,7 @@ class TestHeaps(unittest.TestCase):
 
     def test_heapify_runtime(self):
         power = 1
-        max_power = 8
+        max_power = 6
         min_value = 0
         max_value = 10 ** max_power
         while power <= max_power:

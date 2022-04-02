@@ -9,24 +9,24 @@ def bubble_down(a=[], start=0, min=True):
     left = (2 * start) + 1
     right = left + 1
 
-    # if there is a right node, do comparisons against right node
+    # if there is a right node, start comparisons against right node
     if right < len(a):
         if min:
             # if left is smallest child and parent > left, swap
-            if left < len(a) and a[left] < a[right] and a[start] > a[left]:
+            if a[left] <= a[right] and a[start] > a[left]:
                 a[start], a[left] = a[left], a[start]
                 a = bubble_down(a, left, min)
             # right is smallest child; if parent > right, swap
-            elif right < len(a) and a[start] > a[right]:
+            elif a[start] > a[right]:
                 a[start], a[right] = a[right], a[start]
                 a = bubble_down(a, right, min)
         else:
             # if left is largest child and parent < left, swap
-            if left < len(a) and a[left] > a[right] and a[start] < a[left]:
+            if a[left] >= a[right] and a[start] < a[left]:
                 a[start], a[left] = a[left], a[start]
                 a = bubble_down(a, left, min)
             # right is largest child; if parent < right, swap
-            elif right < len(a) and a[start] < a[right]:
+            elif a[start] < a[right]:
                 a[start], a[right] = a[right], a[start]
                 a = bubble_down(a, right, min)
     # comparison against left node only
